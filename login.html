@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>MENSAJES</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no">
+	<link rel="stylesheet" type="text/css" href="css/estilos.css">
+	<script src="js/funciones.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/font-awesome.css">
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400" rel="stylesheet">
+	<meta http-equiv="Content-Security-Policy" content="
+		default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src *; font-src *; connect-src *
+	">
+</head>
+<body>
+
+	<div class="login">
+		<input type="text" id="usuario" placeholder="Usuario">
+		<input type="password" id="password" placeholder="Password">
+		<p class="error"></p>
+		<button onclick="login()">Inicar Sesión</button>
+	</div>
+
+<script>
+	function login(){
+		usuario = document.getElementById('usuario').value;
+		password = document.getElementById('password').value;
+		if(usuario != "" && password != "") {
+			//LOGEAR
+			logAjax = new XMLHttpRequest();
+			logAjax.open('GET','http://148.220.211.95:88/apps2017/sesion3/php/login.php?u='+usuario+'&p='+password);
+			logAjax.send();
+			logAjax.onreadystatechange = function(){
+				if (logAjax.readyState==4 && logAjax.status == 200) {
+					if (logAjax.responseText!="0") {
+						localStorage.setItem('idUsuario', logAjax.responseText);
+						window.location.assign('index.html');
+					}else{
+						document.querySelector('.error').style.opacity="1"
+						document.querySelector('.error').innerHTML = "El usuario no existe";
+						setTimeout(function(){
+							document.querySelector('.error').style.opacity="0"
+						},3000)
+					}
+				}
+			}	
+		}
+	}
+</script>
+
+<style type="text/css">
+
+p{
+	float: left;
+	width: 50%;
+	background: rgba(255,255,255,.8);
+	color: rgba(0,0,0,.7);
+	margin-top: 10px;
+	text-align: center;
+	height: 40px;
+	border-radius: 20px;
+	margin-left: 25%;
+	opacity: 0;
+	transition:.4s all;
+	line-height: 40px;
+}
+body,html{
+	height: 100%;
+}
+	.login{
+		width: 100%;
+		height: 100%;
+		float: left;
+		background: var(--color-principal);
+		padding-top: 200px;
+	}
+
+	input{
+		float: left;
+		width: 80%;
+		margin-left: 10%;
+		height: 40px;
+		border-radius: 20px;
+		margin-top: 10px;
+		border: none;
+		background: rgba(255,255,255,.3);
+		font-size: 1em;
+		color: white;
+		padding-left: 10px;
+		box-sizing: border-box;
+		outline: none;
+	}
+
+	button{
+		width: 50%;
+		margin-left: 25%;
+		float: left;
+		background: transparent;
+		border: 2px solid white;
+		border-radius: 20px;
+		height: 40px;
+		margin-top: 40px;
+		font-size: 1em;
+		color: white;
+		outline: none;
+	}
+</style>
+
+</body>
+</html>
